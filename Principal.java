@@ -4,14 +4,44 @@ import javax.swing.JOptionPane;
 
 public class Principal {
 	public static void main(String[] args) {
-		int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad de jugadores"));
-	
+	int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad de jugadores"));
+	//AQUÍ SE LLAMA AL METODO DE GENERAR EL EQUIPO SEGUN LA CANTIDAD
 	Jugador [] equipo = generarEquipo(cantidad);
+	// AQUÍ SE IMPRIME EL EQUIPO ORDENADO
+	System.out.println("ORDENADO");
+	imprimirEquipo(equipo);
+	//AQUÍ SE INICIA EL METODO DE DESORDENACIÓN
+	System.out.println();
+	desordenarEquipo(equipo);
+	//SE IMPRIME DE NUEVO EL EQUIPO QUE SE IMPRIMIRA DESORDENADO
+	System.out.println("DESORDENADO");
+	imprimirEquipo(equipo);
+	System.out.println();
+
+
 	
-	for (Jugador jugador : equipo) {
-		jugador.imprimir();
+
 	}
-}
+	
+	
+	
+	
+	
+	//Método desordenación de equipo
+	public static Jugador [] desordenarEquipo (Jugador [] equipo) {
+		Jugador aux;
+		for ( int i = 0  ; i < equipo.length   ; i++) {
+			int contador = (int) Math.floor(Math.random()*equipo.length);
+			aux = equipo [i];
+			equipo [i] = equipo [contador];
+			equipo [contador] = aux;
+			
+		}
+		return equipo;
+		
+	
+	}
+	
 	
 	
 	//Método para imprimir el equipo
@@ -22,6 +52,9 @@ public class Principal {
 		}
 		
 	}
+	
+	
+	
 	
 	//Método para generar el equipo
 	public static Jugador[] generarEquipo(int cantidad) {
@@ -36,7 +69,7 @@ public class Principal {
 		return equipo;
 	}
 	
-	// Método para sacar el nombres aleatorios
+	// Método para sacar los nombres aleatorios
 	public static String nombreJugador () {
 		
 		
@@ -49,7 +82,7 @@ public class Principal {
 		
 	}
 	
-	// Método para sacar el apellidos aleatorios
+	// Método para sacar los apellidos aleatorios
 		public static String apellidosJugador () {
 			
 			String [] apellido1 = {"Ariza ","Melero","Baena ","Ruíz ","Reyes ","Garcés ","González ","Martín ","Ortega ","Garcia "};
@@ -68,21 +101,6 @@ public class Principal {
 			return posiciones [(int) Math.floor(Math.random()* posiciones.length )];
 		}
 		
-		
-		
-		
-		//Método para sacar al equipo completo
-		
-		public static void imprimirEquipoCompleto(String [] nombreJugador,String [] apellidoJugador,String []posicion,int []dorsal) {
-			
-			
-			for (int i = 0; i < dorsal.length; i++) {
-				
-				System.out.print(nombreJugador[i] + apellidoJugador[i] + posicion[i] + dorsal[i]);
-				System.out.println();
-			
-			}
-		}
 		
 		
 		
