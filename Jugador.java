@@ -1,7 +1,5 @@
 package programacion;
 
-import java.awt.Component;
-
 public class Jugador {
 	//Declaración de variables
 		private String nombre;
@@ -66,6 +64,8 @@ public class Jugador {
 		public void imprimir() {
 			System.out.println(this.nombre + " "+this.apellidos+" "+this.posicion+" "+this.dorsal);
 		}
+		
+		
 
 		
 		

@@ -3,31 +3,125 @@ package programacion;
 import javax.swing.JOptionPane;
 
 public class Principal {
-	public static void main(String[] args) {
-	int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad de jugadores"));
-	//AQUÍ SE LLAMA AL METODO DE GENERAR EL EQUIPO SEGUN LA CANTIDAD
-	Jugador [] equipo = generarEquipo(cantidad);
-	// AQUÍ SE IMPRIME EL EQUIPO ORDENADO
-	System.out.println("ORDENADO");
-	imprimirEquipo(equipo);
-	//AQUÍ SE INICIA EL METODO DE DESORDENACIÓN
-	System.out.println();
-	desordenarEquipo(equipo);
-	//SE IMPRIME DE NUEVO EL EQUIPO QUE SE IMPRIMIRA DESORDENADO
-	System.out.println("DESORDENADO");
-	imprimirEquipo(equipo);
-	System.out.println();
-
-
 	
+	//Método MAIN
+	public static void main(String[] args) {
+	// Opciones del menu
+	int opcion = Integer.parseInt(JOptionPane.showInputDialog("Bienvenido al menú elige una opcion\n"
+			+ "1 Generar Equipo\n"
+			+ "2 Generar Equipo desordenado\n"
+			+ "3 Buscar un jugador (Busqueda binaria)"));
+	
+	menu(opcion);
+		
 
 	}
 	
+	//Método para generar el menu
+	public static void menu (int opcion) {
+		switch (opcion) {
+		case 1: 
+		int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad de jugadores:"));
+		Jugador [] equipo = generarEquipo(cantidad);
+		imprimirEquipo(equipo);
+		break;
+		
+		case 2: 
+		int cantidad2 = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad de jugadores"));
+		equipo = generarEquipo(cantidad2);
+		desordenarEquipo(equipo);
+		imprimirEquipo(equipo);
+		break;
+		case 3:
+		int cantidad3 = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad de jugadores"));
+		equipo = generarEquipo(cantidad3);
+		imprimirEquipo(equipo);
+		System.out.println();
+		System.out.println("RESULTADOS DEL JUGADOR BUSCADO");
+		imprimirJugadorBuscado(equipo);
+		break;
+		
+		
+		default: System.out.println("Por ahora solo estan disponbles del 1 al 3");
+		}
+		
+	}
+	
+	//Método para imprimir el el jugador buscado gracias al metodo de  búsqueda de la posicion elegida.
+	
+	public static void imprimirJugadorBuscado ( Jugador [] equipo ) {
+		int jugador =buscarJugador(equipo);
+		if (jugador == -1) {
+			System.out.println("El jugador no ha sido encontrado");
+		}else {
+			equipo [jugador ].imprimir();
+		}
+		
+		
+	}
+	
+	//Método para buscar un jugador por su dorsal, este nos devuelve la posicion del jugador para aplicarlo en otro metodo.
+	public static int buscarJugador (Jugador [] equipo) {
+		int numero = (int) Integer.parseInt(JOptionPane.showInputDialog("¿Qué número de dorsal estas buscando?"));
+		
+		int izq = equipo [0].getDorsal();
+		int der = equipo [equipo.length -1].getDorsal();
+		boolean encontrado = false;
+		
+		
+		for (int i = 0; i < equipo.length; i++) {
+			
+			int posicion =  (izq + der) /2;
+			if ( posicion == numero) {
+				encontrado = true;
+				return posicion;
+				 
+			}else if (numero < equipo [posicion].getDorsal()) {
+				
+				der = equipo [posicion].getDorsal() -1;
+				
+			}else {
+				izq = equipo [posicion].getDorsal() +1;
+			}
+			
+		}
+		
+		if (encontrado == false) {
+			return -1;
+		}else {
+			return -1;
+		}
+		
+		
+	}
+		
+		
+	
+	//Método para imprimir el equipo
+	public static void  imprimirEquipo (Jugador [] equipo) {
+		
+		for (Jugador jugador : equipo) {
+			 jugador.imprimir();
+		}
+		
+	}
 	
 	
+	//Método para generar el equipo
+	public static Jugador[] generarEquipo(int cantidad) {
+		Jugador[] equipo = new Jugador[cantidad];
+		for (int i=0; i<cantidad;i++) {
+			String nombre= nombreJugador();
+			String apellidos = apellidosJugador();
+			String posicion = posicionJugador();
+			int dorsal=i;
+			equipo[i]= new Jugador (nombre, apellidos, posicion, dorsal);
+		}
+		return equipo;
+	}
 	
-	
-	//Método desordenación de equipo
+
+	//Método  para desordenar el equipo
 	public static Jugador [] desordenarEquipo (Jugador [] equipo) {
 		Jugador aux;
 		for ( int i = 0  ; i < equipo.length   ; i++) {
@@ -40,33 +134,6 @@ public class Principal {
 		return equipo;
 		
 	
-	}
-	
-	
-	
-	//Método para imprimir el equipo
-	public static void  imprimirEquipo (Jugador [] equipo) {
-		
-		for (Jugador jugador : equipo) {
-			 jugador.imprimir();
-		}
-		
-	}
-	
-	
-	
-	
-	//Método para generar el equipo
-	public static Jugador[] generarEquipo(int cantidad) {
-		Jugador[] equipo = new Jugador[cantidad];
-		for (int i=0; i<cantidad;i++) {
-			String nombre= nombreJugador();
-			String apellidos = apellidosJugador();
-			String posicion = posicionJugador();
-			int dorsal=i+1;
-			equipo[i]= new Jugador (nombre, apellidos, posicion, dorsal);
-		}
-		return equipo;
 	}
 	
 	// Método para sacar los nombres aleatorios
