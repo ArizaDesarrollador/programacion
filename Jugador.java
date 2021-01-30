@@ -18,13 +18,7 @@ public class Jugador {
 			this.dorsal=dorsal;
 		}
 		
-	//constructor de dorsal
-		public Jugador (int dorsal) {
-			this.dorsal = dorsal;
-		}
 		
-		
-			
 		// El get y el set para nombre.
 		public void setNombre (String nombre) {
 			this.nombre = nombre;
