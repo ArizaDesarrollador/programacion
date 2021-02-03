@@ -1,3 +1,5 @@
+//TRABAJO EN GRUPO DE PROGRAMACIÓN-2º TRIMESTRE.
+//INTEGRANTES: JESÚS Y RIDUOAN.
 package programacion;
 
 public class Jugador {

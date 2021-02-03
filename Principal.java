@@ -4,22 +4,29 @@
 
 package programacion;
 
+
+
 import java.util.Arrays;
 
 import javax.swing.JOptionPane;
+
+
 
 public class Principal {
 	
 	//Método MAIN
 	public static void main(String[] args) {
-	// Opciones del menu
+	
+		
+		// Opciones del menu
 	int opcion = Integer.parseInt(JOptionPane.showInputDialog(" <(^.^)> Bienvenido al menú. Elige una opcion. <(^.^)>\n"
 			+ "1 Generar Equipo.\n"
 			+ "2 Generar Equipo desordenado.\n"
 			+ "3 Buscar un jugador (Busqueda binaria).\n"
 			+ "4 Ordenar equipo desordenado con Bubble-Sort.\n"
 			+ "5 Ordenar equipo desordenado con Quick-Sort.\n"
-			+ "6 Comparar algoritmos de orden Quick & Bubble."));
+			+ "6 Comparar algoritmos de orden Quick & Bubble mediante tiempos de ejecución.\n"
+			+ "7 Comparar algoritmos de ornden Quick & bubble mediante pasos"));
 	//MÉTODO DEL MENU QUE EJECUTARÁ TODOS LOS MÉTODOS DE LA OPCIÓN ELEGIDA
 	menu(opcion); 
 		
@@ -77,10 +84,10 @@ public class Principal {
 			imprimirEquipo(equipo5);
 			break;
 		case 6:
-			mainAlgoritmos();
-			
-			
-			
+		comparacionNanoSystem();
+			break;
+		case 7:
+			sorterStepsWinner();
 			break;
 		// EN EL CASO DE QUE EL USUARIO INSERTE UN NUMERO SIN CASE APARECERA EL SIGUIENT MENSAJE
 		default: JOptionPane.showMessageDialog(null, "Solo hay 6 opciones posibles.");
@@ -91,9 +98,8 @@ public class Principal {
 	
 	//MÉTODO PARA ORDENAR CON QUICK-SORT
 		public static Jugador [] quick (Jugador [] equipo,int primero,int ultimo) {
-			int contadorPivote = 0;
+	
 			int pivote = equipo [(primero + ultimo) /2].getDorsal();
-			contadorPivote++;
 			
 			int i = primero;
 			int j = ultimo;
@@ -131,28 +137,90 @@ public class Principal {
 			
 			
 		}
+		
+		//MÉTODO PARA RETORNAS LOS PASOS DE QUICKSORT
+		public static int pasosQuick (Jugador []equipo,int primero,int ultimo) {
+			//MÉTODO PARA ORDENAR CON QUICK-SORT
+				int contador = 0;
+				int pivote = equipo [(primero + ultimo) /2].getDorsal();
+				
+				int i = primero;
+				int j = ultimo;
+				Jugador aux ;
+				
+				
+				while (i<j) {
+					while (equipo [i].getDorsal() < pivote && i<j) {
+						i++;
+					}
+					
+					while ( equipo [j].getDorsal() > pivote) {
+						j--;
+					}
+					
+					contador++;
+					if (i<j) {
+						aux = equipo[i];
+						equipo [i] = equipo [j];
+						equipo [j] = aux;
+						
+					}
+				}
+				contador++;
+				if (primero < j-1) {
+					quick(equipo, primero, j);
+				}
+				contador++;
+				if (i+1 < ultimo) {
+					quick(equipo, i, ultimo);
+				}
+				
+			
+				
+				return contador ;
+			
+			}
+		
 	
 	//MÉTODO PARA ORDENAR UN EQUIPO DESORDENADO CON BUBBLE
 	public static Jugador [] equipoBubble (Jugador [] equipo ) {
-		
+		int contador = 0;
 		Jugador aux;
 		for (int i = 0; i < equipo.length-1; i++) {
 			for ( int j = 0; j< equipo.length -1 -i; j++) {
+				
 				if (equipo[j].getDorsal() > equipo [j+1].getDorsal()) {
 					aux = equipo [j];
 					equipo [j] = equipo [j+1];
 					equipo [j+1] = aux;
-					
 				
 				}  
 			
-				
 			}
 		}
 		
-		
 		return equipo;
 
+	}
+	
+	//MÉTODO BUBBLE PARA SACAR SOLO LOS PASOS
+	public static int pasosBubble (Jugador [] equipo ) {
+		int contador = 0;
+		Jugador aux;
+		for (int i = 0; i < equipo.length-1; i++) {
+			for ( int j = 0; j< equipo.length -1 -i; j++) {
+				contador++;
+				if (equipo[j].getDorsal() > equipo [j+1].getDorsal()) {
+					aux = equipo [j];
+					equipo [j] = equipo [j+1];
+					equipo [j+1] = aux;
+				
+				}  
+			
+			}
+		}
+		
+		return contador;
 	}
 	
 	
@@ -278,174 +346,73 @@ public class Principal {
 		}
 		
 		
+	
+		
+		//COMPARAR LOS ALGORITMOS DE ORDENACIÓN CON NANO-TIME
+		public static void comparacionNanoSystem() {
+			int cantidad = 0;
+		do {
+			cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad"));//Input para introducir la cantidad de jugadores
+		}while (cantidad < 50000);
+		Jugador [] equipo = generarEquipo(cantidad);//generar el equipo
+		desordenarEquipo(equipo); // desordenar el equipo
+		
+		//Usando nanoTime para saver el tiempo que tarda en ejecutarse
+		//Bubble
+		long inicio = System.nanoTime();
+		equipoBubble(equipo);
+		long fin = System.nanoTime();
+		double resultado =(double) (fin - inicio) / 1e+9; //Lo dividimos por 1e+9 para obtener los segundos.
+		System.out.println("Bubble-Sort ha tardado "+ resultado+" segundos en ejecutarse");
+		
+		//Quick
+		Jugador [] copiaEquipo = Arrays.copyOf(equipo, equipo.length); //Creamos una copia del array.
+		desordenarEquipo(copiaEquipo); //Volvemos a desordenar el equipo
+		System.out.println();
+		long inicio2 = System.nanoTime();
+		quick(copiaEquipo, 0, copiaEquipo.length -1);
+		long fin2 = System.nanoTime();
+		double resultado2 =(double) (fin2 - inicio2) / 1e+9; //Lo dividimos por 1e+9 para obtener los segundos.
+		System.out.println("Quick-Sort ha tardado "+ resultado2+" segundos en ejecutarse");
 		
 		
-		
-		/*********** EJERCICIO 6*************/ 
-		
-		//AQUÍ AÑADO METODOS REPETIDOS PARA NO APLICARLOS A LOS OBJETOS PARA QUE SEA UNA COMPARACIÓN SOLO DE NUMEROS.
-
-		//COMPARAR ALGORITMOS DE ORDEN
-		
-			// EJERCICIO 6 PARA CALCULAR EL TIEMPO DE EJECUCIÓN DE CADA UNO DE LOS DOS ALGORITMOS DE ORDENAMIENTO.
-			//ESTE ES EL MÉTODO MAIN QUE IRÁ EN EL MENÚ Y DENTRO DE ESTE ESTAN TODOS LOS MÉTODOS INTEGRADOS.
-		public static void mainAlgoritmos() {
-				int cantidad;
-				//REALIZARÁ LA RECOGIDA DE DATOS HASTA QUE EL NÚMERO SEA IGUAL O MAYOR A CIEN-MIL.
-				do {
-				 cantidad = Integer.parseInt(JOptionPane.showInputDialog("introduce una cantidad >= 1e5 (100000)", "Ejemplo: 568954 "));
-				}while (cantidad < 100000);
-				
-				// CREAMOS EL ESPACIO EN MEMORIA Y AÑADIMOS EL MÉTODO QUE GENERA EL EQUIPO COMO TAMBIÉN EL MÉTODO  DESORDENAR.
-				int [] a = new int [cantidad];
-				a = generarEquipoComparacion(cantidad);
-				desordenarEquipoComparacion(a);
-				
-				// AQUÍ USAMOS EL METODO NANOTIME DONDE CREAMOS UN INICIO Y UN FINAL PARA LUEGO MOSTRAR EL TIEMPO DE EJECUCIÓN
-				long inicio = System.nanoTime();
-				
-				//CREAMOS UN DUPLICADO DEL ARRAY ORIGINAL PARA QUE CADA UNO EJECUTE UN ARRAY DESORDENADO
-				int [] newArray = Arrays.copyOf(a, a.length);
-				System.out.println("****QUICK-SORT****");
-				quickSortComparacion(newArray, 0, newArray.length -1);
-			
-				long fin = System.nanoTime(); //ESTE ES EL FINAL DEL NANO TIME Y CALCULARÁ LO QUE SE EJECUTA DENTRO DE EL.
-				double resultado = (double) (fin - inicio) / 1e+9 ;// AQUÍ HACEMOS UNA CONVERSIÓN A DOUBLE Y LO DIVIDIMOS PARA QUE NOS DE EL RESULTADO EN SEGUNDOS
-				//
-				
-				
-				System.out.println("QUICK-SORT HA OBTENIDO UN TIEMPO DE: "+resultado + " Segundos");
-				System.out.println();
-				
-				// AQUÍ CREAMOS OTRO ARRAY DUPLICADO PARA QUE ESTE NO NOS VENGA ORDENADO DESDE ARRIBA
-				int [] newArray2 = Arrays.copyOf(a, a.length);
-				
-				long inicio2 = System.nanoTime();
-				bubbleSortComparacion(newArray2);
-			
-				long fin2 = System.nanoTime();
-				double resultado2 = (double)  (fin2 - inicio2) / 1e+9 ;   
-				System.out.println("****BUBBLE-SORT****");
-				System.out.println("BUBBLE-SORT HA OBTENIDO UN TIEMPO DE: "+resultado2+ " Segundos");
-				System.out.println();
-				
-				if (inicio < inicio2) {
-					
-					System.out.println("****EL ALGORITMO DE QUICK-SORT HA SIDO MÁS RÁPIDO****");
-				}else {
-					System.out.println("****EL ALGORITMO DE BUBBLE HA SIDO MÁS RÁPIDO****");
-				}
-				
+		System.out.println("********************* AND THE WINNER IS *********************");
+		if (resultado < resultado2) {
+			System.out.println("¡¡¡¡¡¡BUBBLE-SORT!!!!!!");
+		}else {
+			System.out.println("¡¡¡¡¡¡QUICK-SORT!!!!!!");
 		}
-				
-			/* AQUÍ COMIENZAN LOS MÉTODOS NECESARIOS PARA EL EJERCICIO 6*/
+		
+		
+		}
+		
+		//METODO PARA COMPARAR LOS PASOS QUE DA CADA ALGORITMO Y MOSTRAR EL GANADOR
+		public static void sorterStepsWinner() {
+			int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad"));//Input para introducir la cantidad de jugadores
+			Jugador [] equipo = generarEquipo(cantidad);
+			desordenarEquipo(equipo);
+			System.out.println("QUICK-SORT HA DADO UNA CANTIDAD DE PASOS DE: ");
+			System.out.println(pasosQuick(equipo, 0, equipo.length-1));
 			
-			// GENERAR EQUIPO PARA EL EJERCICIO DE COMPARACIÓN
-			public static int [] generarEquipoComparacion (int cantidad) {
-				int[]equipo = new int [cantidad];
-				for (int i = 0; i < equipo.length; i++) {
-					equipo [i] = i;
-					
-				}
-				return equipo;
-			}
-			
-			// QUICK ORDENAMIENTO COMPARACIÓN
-			public static int[] quickSortComparacion (int[] a, int primero, int ultimo) {
-				int pivote = a [(primero + ultimo) /2];
-				int i = primero;
-				int j = ultimo;
-				int aux;
-				
-				
-				
-				
-				while (i<j) {
-					
-					while (a [i] < pivote && i<j) {
-						i++;
-						
-					}
-					
-					while (a [j] > pivote) {
-						j--;
-					}
-					
-					if (i<j ) {
-						aux = a [i];
-						a [i] = a[j];
-						a[j] = aux;
-						
-						
-					}
-					
-				}
-				
-				
-				if (primero < j - 1) {
-					quickSortComparacion(a, primero, j);
-					
-				}
-				
-				if (i +1 < ultimo) {
-					quickSortComparacion(a, i , ultimo);
-					
-				}
-				
-				return a;
+			System.out.println();
+			Jugador [] copiaEquipo = Arrays.copyOf(equipo, equipo.length); //Creamos una copia del array.
+			desordenarEquipo(copiaEquipo);
+			System.out.println("BUBBLE-SORT HA DADO UNA CANTIDAD DE PASOS DE: ");
+			System.out.println(pasosBubble(copiaEquipo));
+			System.out.println();
+			System.out.println("********************* AND THE WINNER IS *********************");
+			if (pasosBubble(copiaEquipo) < pasosQuick(copiaEquipo, 0, copiaEquipo.length-1)) {
+				System.out.println("¡¡¡¡¡¡BUBBLE-SORT!!!!!!");
+			}else {
+				System.out.println("¡¡¡¡¡¡QUICK-SORT!!!!!!");
 			}
 			
 			
-			//BUBBLE ORDENAMIENTO COMPARACIÓN
-		public static int [] bubbleSortComparacion (int [] equipo ) {
-				
-				int aux;
-				for (int i = 0; i < equipo.length-1; i++) {
-					for ( int j = 0; j< equipo.length -1 -i; j++) {
-						if (equipo[j] > equipo [j+1]) {
-							aux = equipo [j];
-							equipo [j] = equipo [j+1];
-							equipo [j+1] = aux;
-							
-						
-						}  
-					
-						
-					}
-				}
-				
-				return equipo;
-		}
 			
-			
-
-
-
-		//IMPRIMIR ARRAY COMPARACIÓN
-			public static void imprimirComparacion (int[]array) {
-				for (int i = 0; i < array.length; i++) {
-					System.out.println(array[i]);
-				}
-				
-				
-			}
-			
-			
-			//DESORDENAR ARRAY COMPARACIÓN
-			public static int [] desordenarEquipoComparacion (int [] equipo) {
-				int aux;
-				for ( int i = 0  ; i < equipo.length   ; i++) {
-					int contador = (int) Math.floor(Math.random()*equipo.length);
-					aux = equipo [i];
-					equipo [i] = equipo [contador];
-					equipo [contador] = aux;
-					
-				}
-				return equipo;
 			
 		}
-			
-
+		
+		
 		
 		
 		
