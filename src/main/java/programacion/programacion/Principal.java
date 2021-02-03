@@ -334,19 +334,13 @@ public class Principal {
         public static void comparacionNanoSystem() {
                 int cantidad = 0;
         do {
-                cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad"));//Input para introducir la cantidad de jugadores
-        }while (cantidad < 50000);
+                cantidad = Integer.parseInt(JOptionPane.showInputDialog("Escribe una cantidad","Mínimo 30.000 Jugadores"));//Input para introducir la cantidad de jugadores
+        }while (cantidad < 30000);
         Jugador [] equipo = generarEquipo(cantidad);//generar el equipo
         desordenarEquipo(equipo); // desordenar el equipo
 
         //Usando nanoTime para saver el tiempo que tarda en ejecutarse
-        //Bubble
-        long inicio = System.nanoTime();
-        equipoBubble(equipo);
-        long fin = System.nanoTime();
-        double resultado =(double) (fin - inicio) / 1e+9; //Lo dividimos por 1e+9 para obtener los segundos.
-        System.out.println("Bubble-Sort ha tardado "+ resultado+" segundos en ejecutarse");
-
+       
         //Quick
         Jugador [] copiaEquipo = Arrays.copyOf(equipo, equipo.length); //Creamos una copia del array.
         desordenarEquipo(copiaEquipo); //Volvemos a desordenar el equipo
@@ -356,6 +350,23 @@ public class Principal {
         long fin2 = System.nanoTime();
         double resultado2 =(double) (fin2 - inicio2) / 1e+9; //Lo dividimos por 1e+9 para obtener los segundos.
         System.out.println("Quick-Sort ha tardado "+ resultado2+" segundos en ejecutarse");
+        
+        //QUICK-SORT-PROFESOR
+        Jugador [] copiaEquipo2 = Arrays.copyOf(equipo, equipo.length); //Creamos una copia del array.
+        desordenarEquipo(copiaEquipo2); //Volvemos a desordenar el equipo
+        System.out.println();
+        long inicio3 = System.nanoTime();
+        quick(copiaEquipo2, 0, copiaEquipo2.length -1);
+        long fin3 = System.nanoTime();
+        double resultado3 =(double) (fin3 - inicio3) / 1e+9; //Lo dividimos por 1e+9 para obtener los segundos.
+        System.out.println("Quick-Sort-Profesor ha tardado "+ resultado3+" segundos en ejecutarse");
+        
+         //Bubble
+        long inicio = System.nanoTime();
+        equipoBubble(equipo);
+        long fin = System.nanoTime();
+        double resultado =(double) (fin - inicio) / 1e+9; //Lo dividimos por 1e+9 para obtener los segundos.
+        System.out.println("Bubble-Sort ha tardado "+ resultado+" segundos en ejecutarse");
 
         //MOSTRAR RESULTADOS DE QUICK SORT
         System.out.println("********************* AND THE WINNER IS *********************");
@@ -375,23 +386,71 @@ public class Principal {
                 desordenarEquipo(equipo);
                 System.out.println("QUICK-SORT HA DADO UNA CANTIDAD DE PASOS DE: ");
                 System.out.println(pasosQuick(equipo, 0, equipo.length-1));
-
+                
+                //QUICK-SORT-PROFESOR
+                System.out.println();
+                Jugador [] copiaEquipo2 = Arrays.copyOf(equipo, equipo.length); //Creamos una copia del array.
+                desordenarEquipo(copiaEquipo2);
+                System.out.println("QUICK-SORT-PROFESOR HA DADO UNA CANTIDAD DE PASOS DE: ");
+                System.out.println(quickSortProfesor(copiaEquipo2, 0, copiaEquipo2.length-1));
+                System.out.println();
+                
+                //BUBBLE-SORT
                 System.out.println();
                 Jugador [] copiaEquipo = Arrays.copyOf(equipo, equipo.length); //Creamos una copia del array.
                 desordenarEquipo(copiaEquipo);
                 System.out.println("BUBBLE-SORT HA DADO UNA CANTIDAD DE PASOS DE: ");
                 System.out.println(pasosBubble(copiaEquipo));
                 System.out.println();
-                //MOSTRAR RESULTADOS DE BUBBLE
+                
+                
+                
                 System.out.println("********************* AND THE WINNER IS *********************");
-                if (pasosBubble(copiaEquipo) < pasosQuick(copiaEquipo, 0, copiaEquipo.length-1)) {
+                if (pasosBubble(copiaEquipo) < pasosQuick(copiaEquipo, 0, copiaEquipo.length-1) ) {
                         System.out.println("¡¡¡¡¡¡BUBBLE-SORT!!!!!!");
-                }else {
+                }
+                 
+                
+                
+                else  {
                         System.out.println("¡¡¡¡¡¡QUICK-SORT!!!!!!");
                 }
 
         }
         
         //MÉTODO PROFESOR QUICK-SORT.
+    
+	
+	public static int quickSortProfesor(Jugador[] equipo, int izq, int der) {
+            Jugador pivote = equipo[izq];
+            int contador = 0;
+           // Jugador pivoteJugador = equipo[izq];
+   
+		int i=izq;
+		int j=der;
+		Jugador temp;
+		
+		while (i<j) {
+			while (equipo[i].getDorsal()<= pivote.getDorsal() && i<j) i++;
+			while (equipo[j].getDorsal()>pivote.getDorsal()) j--;
+				contador++;
+                                if (i<j) {
+					temp=equipo[i];
+					equipo[i]=equipo[j];
+					equipo[j]=temp;
+				}
+		}
+		equipo[izq]=equipo[j];
+		equipo[j]=pivote;
+                
+		contador++;
+		if (izq < j-1) quickSortProfesor(equipo,izq,j-1);
+                contador++;
+		if (der > j+1) quickSortProfesor(equipo,j+1,der);
+                
+                return contador;
+	}
+
+            
         
 }
